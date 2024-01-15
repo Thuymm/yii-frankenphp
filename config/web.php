@@ -23,7 +23,7 @@ $config = [
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ],
-            'enableCsrfCookie' => false
+            // 'enableCsrfCookie' => false
         ],
         'response' => [
             'content' => \yii\web\Response::FORMAT_HTML,

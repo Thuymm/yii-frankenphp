@@ -13,15 +13,9 @@ class PostController extends \yii\rest\ActiveController
         'collectionEnvelope' => 'items',
     ];
 
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        return $behaviors;
-    }
-
-    public function beforeAction($action)
-    {
-        \Yii::$app->request->enableCsrfValidation = false;
-        return parent::beforeAction($action);
-    }
+    // public function behaviors()
+    // {
+    //     $behaviors = parent::behaviors();
+    //     return $behaviors;
+    // }
 }
