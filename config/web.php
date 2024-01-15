@@ -7,6 +7,11 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'modules' => [
+        'v1' => [
+            'class' => 'app\modules\v1\v1',
+        ],
+    ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -17,7 +22,19 @@ $config = [
             'cookieValidationKey' => '9HPU8Ij6hKaF2SPP8zNs8JcOSWWGtgG8',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
-            ]
+            ],
+            'enableCsrfCookie' => false
+        ],
+        'response' => [
+            'content' => \yii\web\Response::FORMAT_HTML,
+            'formatters' => [
+                \yii\web\Response::FORMAT_JSON => [
+                    'class' => 'yii\web\JsonResponseFormatter',
+                    'prettyPrint' => YII_DEBUG, // use "pretty" output in debug mode
+                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+                    // ...
+                ],
+            ],
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -47,10 +64,14 @@ $config = [
         'db' => $db,
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'enableStrictParsing' => true,
+            'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
+                'PUT,PATCH <module:\w+>/<controller:\w+>/<id:\d+>' => '<module>/<controller>/update',
+                'DELETE <module:\w+>/<controller:\w+>/<id:\d+>/<action:\w+>' => '<module>/<controller>/<action>/<id>',
+                'GET,HEAD <module:\w+>/<controller:\w+>/<id:\d+>' => '<module>/<controller>/view',
+                'POST <module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
+                'GET,HEAD <module:\w+>/<controller:\w+>' => '<module>/<controller>/index',
             ],
         ],
     ],
