@@ -2,12 +2,13 @@
 
 namespace app\models;
 
+use app\common\behaviors\PrimaryKeyBehavior;
 use Yii;
 
 /**
  * This is the model class for table "post".
  *
- * @property int $id
+ * @property string $id
  * @property string|null $title
  * @property string|null $body
  */
@@ -29,6 +30,8 @@ class Post extends \yii\db\ActiveRecord
         return [
             [['body'], 'string'],
             [['title'], 'string', 'max' => 255],
+            [['id'], 'string', 'max' => 255],
+            [['id'], 'unique'],
         ];
     }
 
@@ -41,6 +44,13 @@ class Post extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Title',
             'body' => 'Body',
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            PrimaryKeyBehavior::class,
         ];
     }
 }
