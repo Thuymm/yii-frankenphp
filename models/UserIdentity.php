@@ -35,13 +35,14 @@ class UserIdentity extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'email', 'password_hash', 'status', 'auth_key', 'created_at', 'updated_at'], 'required'],
+            [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['username', 'email', 'password_hash', 'password_reset_token', 'account_activation_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
-            [['username'], 'unique'],
+            [['account_activation_token'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
-            [['account_activation_token'], 'unique'],
+            [['username'], 'unique'],
         ];
     }
 

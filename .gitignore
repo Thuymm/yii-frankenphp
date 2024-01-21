@@ -35,5 +35,8 @@ tests/_support/_generated
 #vagrant folder
 /.vagrant
 
+#db file
+config/db.php
+
 #frankenphp static build file
 my-app

@@ -1,5 +1,5 @@
 <?php
-
+//* FOR MYSQL UUID id column
 namespace app\common\behaviors;
 
 use Yii;

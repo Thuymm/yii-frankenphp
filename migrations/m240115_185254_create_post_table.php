@@ -12,8 +12,9 @@ class m240115_185254_create_post_table extends Migration
      */
     public function safeUp()
     {
+        $this->getDb()->createCommand('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')->execute();
         $this->createTable('post', [
-            'id' => 'varchar(255) default (uuid_to_bin(uuid())) not null primary key',
+            'id' => 'uuid PRIMARY KEY DEFAULT uuid_generate_v4()',
             'title' => $this->string(),
             'body' => $this->text(),
         ]);

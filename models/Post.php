@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use app\common\behaviors\PrimaryKeyBehavior;
 use Yii;
 
 /**
@@ -28,9 +27,8 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['body'], 'string'],
+            [['id', 'body'], 'string'],
             [['title'], 'string', 'max' => 255],
-            [['id'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
     }
@@ -44,13 +42,6 @@ class Post extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Title',
             'body' => 'Body',
-        ];
-    }
-
-    public function behaviors()
-    {
-        return [
-            PrimaryKeyBehavior::class,
         ];
     }
 }
