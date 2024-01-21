@@ -1,9 +1,40 @@
-version: '2'
+# version: '2'
+# services:
+#   php:
+#     image: yiisoftware/yii2-php:7.4-apache
+#     volumes:
+#       - ~/.composer-docker/cache:/root/.composer/cache:delegated
+#       - ./:/app:delegated
+#     ports:
+#       - '8000:80'
+version: '3.8'
 services:
   php:
-    image: yiisoftware/yii2-php:7.4-apache
+    image: yiisoftware/yii2-php:8.2-apache
+    container_name: yii-rest
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./:/app:delegated
     ports:
       - '8000:80'
+
+  db:
+    image: postgres
+    container_name: postgresdb
+    restart: always
+    environment:
+      - POSTGRES_DB=test
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=postgresdev
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - db-data:/var/lib/postgresql/data/pgdata
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  default:
+    name: franken
+    driver: bridge
