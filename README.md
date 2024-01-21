@@ -12,7 +12,7 @@ docker build -t static-app -f static-build.Dockerfile .
 
 docker cp $(docker create --name static-app-tmp static-app):/go/src/app/dist/frankenphp-linux-x86_64 my-app ; docker rm static-app-tmp
 
-docker run -it --rm -v $(pwd)/my-app:/srv/my-app -p 443:443 ubuntu:22.04 bash
+docker run -it --rm --network=franken -v $(pwd)/my-app:/srv/my-app -p 443:443 ubuntu:22.04 bash
 ```
 
 Yii 2 Basic Project Template is a skeleton [Yii 2](https://www.yiiframework.com/) application best for
