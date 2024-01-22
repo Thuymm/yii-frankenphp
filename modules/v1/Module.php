@@ -5,7 +5,7 @@ namespace app\modules\v1;
 /**
  * v1 module definition class
  */
-class v1 extends \yii\base\Module
+class Module extends \yii\base\Module
 {
     /**
      * {@inheritdoc}
