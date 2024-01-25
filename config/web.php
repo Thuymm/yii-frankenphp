@@ -9,7 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'modules' => [
         'v1' => [
-            'class' => 'app\modules\v1\v1',
+            'class' => 'app\modules\v1\Module',
         ],
     ],
     'aliases' => [
