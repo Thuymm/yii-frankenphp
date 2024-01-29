@@ -16,15 +16,19 @@ class DefaultController extends Controller
     {
         return [
             'doc' => [
-                'class' => 'light\swagger\SwaggerAction',
-                'restUrl' => Url::to(['/v1/default/api'], true),
+                'class' => 'app\modules\apiDoc\actions\SwaggerDoc',
+                'restUrl' => Url::to(['/v1/default/json'], true),
             ],
             'api' => [
-                'class' => 'light\swagger\SwaggerApiAction',
+                'class' => 'app\modules\apiDoc\actions\Redoc',
+                'restUrl' => Url::to(['/v1/default/json'], true),
+            ],
+            'json' => [
+                'class' => 'app\modules\apiDoc\actions\OpenApiRenderer',
                 'scanDir' => [
-                    Yii::getAlias('@app/modules/v1/controllers'),
+                    '@app/modules/v1/controllers',
+                    '@app/modules/v1/models',
                 ],
-                'api_key' => 'test'
             ],
         ];
     }

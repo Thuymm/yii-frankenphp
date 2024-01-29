@@ -5,14 +5,6 @@ namespace app\modules\v1\controllers;
 use app\models\Post;
 use OpenApi\Attributes as OA;
 
-#[OA\Info(
-    version: '1.0.0',
-    title: 'Yii Rest Api',
-    attachables: [new OA\Attachable()]
-)]
-#[OA\Server('/v1', 'version 1')]
-#[OA\Server('/v2', 'version 2')]
-#[OA\License(name: 'MIT')]
 #[OA\Tag(name: 'post', attachables: [new OA\Attachable(),])]
 class PostController extends \yii\rest\ActiveController
 {
@@ -48,7 +40,9 @@ class PostController extends \yii\rest\ActiveController
         ];
     }
 
-    #[OA\Get(path: '/post', tags: ['post'])]
+    #[OA\Get(path: '/post', tags: ['post'], operationId: 'Get All Posts', responses: [
+        new OA\Response(response: 'default', description: 'Default response'),
+    ])]
     #[OA\Response(null, 200, '')]
     public function actionIndex()
     {
