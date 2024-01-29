@@ -15,13 +15,13 @@ class DefaultController extends Controller
     public function actions()
     {
         return [
-            'doc' => [
-                'class' => 'app\modules\apiDoc\actions\SwaggerDoc',
-                'restUrl' => Url::to(['/v1/default/json'], true),
-            ],
             'api' => [
+                'class' => 'app\modules\apiDoc\actions\SwaggerDoc',
+                'restUrl' => Url::to(['default/json'], true),
+            ],
+            'doc' => [
                 'class' => 'app\modules\apiDoc\actions\Redoc',
-                'restUrl' => Url::to(['/v1/default/json'], true),
+                'restUrl' => Url::to(['default/json'], true),
             ],
             'json' => [
                 'class' => 'app\modules\apiDoc\actions\OpenApiRenderer',
@@ -29,6 +29,8 @@ class DefaultController extends Controller
                     '@app/modules/v1/controllers',
                     '@app/modules/v1/models',
                 ],
+                'cache' => 'cache',
+                'cacheKey' => 'api-swagger-cache',
             ],
         ];
     }

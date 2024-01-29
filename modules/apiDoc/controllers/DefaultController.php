@@ -4,7 +4,6 @@ namespace app\modules\apiDoc\controllers;
 
 use yii\helpers\Url;
 use yii\web\Controller;
-use yii\web\Response;
 
 /**
  * Default controller for the `api` module
@@ -26,7 +25,11 @@ class DefaultController extends Controller
                 'class' => 'app\modules\apiDoc\actions\SwaggerDoc',
                 'restUrl' => Url::to(['default/json']),
             ],
-            'redoc' => [
+            'api' => [
+                'class' => 'app\modules\apiDoc\actions\SwaggerDoc',
+                'restUrl' => Url::to(['default/json']),
+            ],
+            'doc' => [
                 'class' => 'app\modules\apiDoc\actions\Redoc',
                 'restUrl' => Url::to(['default/json']),
             ]

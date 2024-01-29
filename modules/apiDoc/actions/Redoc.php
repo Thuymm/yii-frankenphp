@@ -29,18 +29,15 @@ class Redoc extends Action
   public function run()
   {
     \Yii::$app->getResponse()->format = Response::FORMAT_HTML;
-    $restUrl = $this->restUrl;
+    $this->controller->layout = false;
+    $view = $this->controller->getView();
     if ($this->restUrl) {
-      $this->controller->layout = false;
-      $view = $this->controller->getView();
-      return $view->renderFile(__DIR__ . '/../views/default/redoc.php', [
-        'restUrl' => $restUrl,
-      ], $this->controller);
+      $restUrl = $this->restUrl;
     } else {
-      $this->layout = false;
-      return $this->render('redoc', [
-        'restUrl' => $restUrl,
-      ]);
+      $restUrl = $this->module->jsonUrl ?: Url::to(['default/json']);
     }
+    return $view->renderFile(__DIR__ . '/../views/default/redoc.php', [
+      'restUrl' => $restUrl,
+    ], $this->controller);
   }
 }

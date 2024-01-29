@@ -3,12 +3,15 @@
 namespace app\modules\apiDoc\actions;
 
 use OpenApi\Annotations\OpenApi;
-use Yii;
-use yii\base\Action;
-use yii\web\Response;
 use OpenApi\Generator;
 use OpenApi\Util;
-
+use Yii;
+use yii\base\Action;
+use yii\base\ExitException;
+use yii\caching\Cache;
+use yii\caching\CacheInterface;
+use yii\di\Instance;
+use yii\web\Response;
 /**
  * Class OpenAPIRenderer is responsible for generating the JSON spec.
  *
@@ -27,11 +30,29 @@ class OpenAPIRenderer extends Action
   public $scanOptions = [];
 
   /**
+   * @var Cache|string|null the cache object or the ID of the cache application component that is used to store
+   * Cache the \Swagger\Scan
+   */
+  public $cache = 'cache';
+  /**
+   * @var bool If enable caching the scan result.
+   * @since 2.0.0
+   */
+  public $enableCache = false;
+  /**
+   * @var string Cache key
+   * [[cache]] must not be null
+   */
+  public $cacheKey = 'api-swagger-cache';
+
+  /**
    * @inheritdoc
    */
   public function init(): void
   {
-    parent::init();
+    $this->cache = Instance::ensure($this->cache, CacheInterface::class);
+
+    $this->enableCORS();
   }
 
   /**
@@ -39,9 +60,18 @@ class OpenAPIRenderer extends Action
    */
   public function run(): Response
   {
-    $this->enableCORS();
+    $this->clearCache();
 
-    return $this->controller->asJson($this->getSwaggerDocumentation());
+    if ($this->enableCache) {
+      if (($swagger = $this->cache->get($this->cacheKey)) === false) {
+        $swagger = $this->getSwaggerDocumentation();
+        $this->cache->set($this->cacheKey, $swagger);
+      }
+    } else {
+      $swagger = $this->getSwaggerDocumentation();
+    }
+
+    return $this->controller->asJson($swagger);
   }
 
   /**
@@ -61,6 +91,21 @@ class OpenAPIRenderer extends Action
   }
 
   /**
+   *
+   * @throws ExitException
+   */
+  protected function clearCache()
+  {
+    $clearCache = Yii::$app->getRequest()->get('clear-cache', false);
+    if ($clearCache !== false) {
+      $this->cache->delete($this->cacheKey);
+
+      Yii::$app->response->content = 'Succeed clear swagger api cache.';
+      Yii::$app->end();
+    }
+  }
+
+  /**
    * Enable CORS
    */
   protected function enableCORS(): void
@@ -68,7 +113,7 @@ class OpenAPIRenderer extends Action
     $headers = Yii::$app->getResponse()->getHeaders();
 
     $headers->set('Access-Control-Allow-Headers', 'Content-Type, api_key, Authorization');
-    $headers->set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT', 'PATCH');
+    $headers->set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH');
     $headers->set('Access-Control-Allow-Origin', '*');
   }
 }
